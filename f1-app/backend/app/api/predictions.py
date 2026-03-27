@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter , Depends
+from sqlalchemy.orm import Session
+from app.db.session import get_db
+from app.prediction.race_context import build_prediction_context
 from app.models.dirty_air import calculate_grid_dirty_air
 from app.models.tyre_deg import calculate_full_strategy
 
@@ -25,3 +28,11 @@ def test_dirty_air(circuit_id: str):
 @router.get("/test/strategy/{circuit_id}")
 def test_strategy(circuit_id: str, laps: int = 57, temp: float = 35.0):
     return calculate_full_strategy(circuit_id, laps, temp)
+
+@router.get("/pre-race/context/{season}/{round_number}")
+def preview_pre_race_context(
+    season : int,
+    round_number : int,
+    db: Session = Depends(get_db),
+):
+    return build_prediction_context(db,season,round_number)
