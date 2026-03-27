@@ -1,10 +1,13 @@
 import fastf1
 import pandas as pd
 from sqlalchemy.orm import Session
-from app.db.models import Stint, Race
+from app.db.models import Stint, Race, DriverNumberMap
+import os
 
 # Cache saves downloaded data locally so you don't re-download
-fastf1.Cache.enable_cache("fastf1_cache")
+_CACHE_DIR = "fastf1_cache"
+os.makedirs(_CACHE_DIR, exist_ok=True)
+fastf1.Cache.enable_cache(_CACHE_DIR)
 
 def fetch_stints(db: Session, season: int, round_number: int):
     # Load the race session from FastF1
@@ -16,10 +19,29 @@ def fetch_stints(db: Session, season: int, round_number: int):
         print("Race not found in DB")
         return
 
+    # Keep ingestion idempotent for iterative development.
+    db.query(Stint).filter_by(race_id=race.id).delete()
+    db.commit()
+
     laps = session.laps
+
+    num_map: dict[int, str] = {
+        m.driver_number: m.ergast_driver_id
+        for m in db.query(DriverNumberMap).filter_by(season=season).all()
+    }
 
     # Group by driver and stint number
     for driver_num in laps["DriverNumber"].unique():
+        try:
+            driver_number_int = int(driver_num)
+        except Exception:
+            continue
+
+        ergast_driver_id = num_map.get(driver_number_int)
+        if not ergast_driver_id:
+            # Mapping hasn't been created (or join failed) — skip this driver's stints
+            continue
+
         driver_laps = laps[laps["DriverNumber"] == driver_num]
 
         for stint_num in driver_laps["Stint"].unique():
@@ -39,7 +61,7 @@ def fetch_stints(db: Session, season: int, round_number: int):
 
             stint = Stint(
                 race_id=race.id,
-                driver_id=str(driver_num),
+                driver_id=ergast_driver_id,
                 stint_number=int(stint_num),
                 compound=compound,
                 start_lap=start_lap,

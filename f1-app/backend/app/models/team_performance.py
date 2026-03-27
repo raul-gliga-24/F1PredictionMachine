@@ -332,7 +332,7 @@ def get_power_unit_ranking() -> list:
         {
             "pu": "audi",
             "rating": 0.76,
-            "teams": ["sauber"],
+            "teams": ["Audi"],
             "note": "Brand new PU. Learning year. Heavy investment behind it."
         },
     ]

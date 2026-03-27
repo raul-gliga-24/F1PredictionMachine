@@ -1,6 +1,6 @@
 from sqlalchemy import (
     Column, Integer, Float, String, Boolean,
-    DateTime, ForeignKey, JSON, Text
+    DateTime, ForeignKey, JSON, Text, UniqueConstraint
 )
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -34,8 +34,23 @@ class Driver(Base):
     stints = relationship("Stint", back_populates="driver")
 
 
+class DriverNumberMap(Base):
+    __tablename__ = "driver_number_map"
+    __table_args__ = (
+        UniqueConstraint("season", "driver_number", name="uq_driver_number_map_season_driver_number"),
+    )
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    season = Column(Integer, nullable=False)
+    driver_number = Column(Integer, nullable=False)
+    ergast_driver_id = Column(String, ForeignKey("drivers.id"), nullable=False)
+
+
 class Race(Base):
     __tablename__ = "races"
+    __table_args__ = (
+        UniqueConstraint("season", "round_number", name="uq_races_season_round_number"),
+    )
 
     id           = Column(Integer, primary_key=True, autoincrement=True)
     season       = Column(Integer, nullable=False)
@@ -53,6 +68,9 @@ class Race(Base):
 
 class GridPosition(Base):
     __tablename__ = "grid_positions"
+    __table_args__ = (
+        UniqueConstraint("race_id", "driver_id", name="uq_grid_positions_race_driver"),
+    )
 
     id                 = Column(Integer, primary_key=True, autoincrement=True)
     race_id            = Column(Integer, ForeignKey("races.id"))

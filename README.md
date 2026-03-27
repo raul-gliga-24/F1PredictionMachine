@@ -1,16 +1,60 @@
-# React + Vite
+# F1PredictionMachine
+F1 prediction web app with a FastAPI backend and a React (Vite) frontend.  
+Backend exposes race, prediction, and championship endpoints and uses Postgres + Redis.
+## Tech stack
+- **Backend**: Python, FastAPI, Uvicorn
+- **Frontend**: React + Vite
+- **Database**: Postgres
+- **Cache / broker**: Redis
+- **Data**: FastF1 (and planned: Ergast/OpenF1)
+- **LLM**: Gemini (via `GEMINI_API_KEY`)
+## Repo structure
+- `f1-app/backend/` — FastAPI app (`uvicorn main:app`)
+- `f1-app/frontend/` — React Vite app
+- `f1-app/docker-compose.yml` — Postgres, Redis, backend services
+## Prerequisites
+- **Docker Desktop** (recommended for Postgres/Redis/backend via Compose)
+- **Node.js** (for the frontend)
+- **Python 3.12** (optional if running backend outside Docker)
+## Quick start (Docker backend + local frontend)
+From the project root:
+```bash
+cd "f1-app"
+docker compose up -d postgres redis backend
+Frontend (separate terminal):
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+cd "f1-app/frontend"
+npm install
+npm run dev
+Frontend: http://localhost:5173
+Backend API: http://localhost:8000
+Health check: http://localhost:8000/health
+Environment variables
+Backend reads .env from:
 
-Currently, two official plugins are available:
+f1-app/backend/.env
+Minimum required keys (based on backend/app/config.py):
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+DATABASE_URL (example: postgresql+psycopg2://f1user:f1pass@postgres:5432/f1db)
+REDIS_URL (example: redis://redis:6379/0)
+GEMINI_API_KEY (your key)
+ENVIRONMENT (optional, default: development)
+Important: .env is ignored by git (see .gitignore). Don’t commit secrets.
 
-## React Compiler
+API routes
+The backend mounts these routers:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+/api/races
+/api/predictions
+/api/championship
+Health:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+GET /health → { "status": "ok" }
+Development notes
+Backend runs with --reload in Docker Compose for faster iteration.
+CORS is configured to allow the Vite dev server at http://localhost:5173.
+Roadmap
+Ingestion from Ergast + OpenF1 and normalization into Postgres
+Derived models (dirty air, tyre degradation)
+Pre-race and live scenario prediction outputs
+Championship Monte Carlo simulation + narrative layer
