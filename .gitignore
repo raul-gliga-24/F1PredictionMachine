@@ -29,3 +29,4 @@ dist-ssr
 *.plan.md
 .cursor/plans/**
 .cursor/plans/**
+implementation_plan.md
