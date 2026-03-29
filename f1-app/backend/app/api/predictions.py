@@ -8,8 +8,21 @@ from app.models.tyre_deg import calculate_full_strategy
 router = APIRouter()
 
 @router.get("/")
-def get_predictions():
-    return {"predictions": []}
+def get_predictions(db: Session = Depends(get_db)):
+    from app.db.models import Prediction
+    predictions = db.query(Prediction).order_by(Prediction.created_at.desc()).all()
+    # Safely serialize the SQLAlchemy objects to a native python dictionary
+    return {"predictions": [
+        {
+            "id": p.id,
+            "race_id": p.race_id,
+            "prediction_type": p.prediction_type,
+            "predicted_order": p.predicted_order,
+            "reasoning_trace": p.reasoning_trace,
+            "model_used": p.model_used,
+            "created_at": p.created_at
+        } for p in predictions
+    ]}
 
 @router.get("/test/dirty-air/{circuit_id}")
 def test_dirty_air(circuit_id: str):
@@ -36,3 +49,12 @@ def preview_pre_race_context(
     db: Session = Depends(get_db),
 ):
     return build_prediction_context(db,season,round_number)
+
+@router.post("/pre-race/{season}/{round_number}")
+def run_pre_race_prediction(
+    season: int,
+    round_number: int,
+    db: Session = Depends(get_db),
+):
+    from app.prediction.race_predictor import predict_race
+    return predict_race(db, season, round_number)

@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Session, func
+from sqlalchemy.orm import Session
+from sqlalchemy import func
 from app.db.models import Race, Driver, DriverNumberMap, Lap
 
 

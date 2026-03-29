@@ -41,20 +41,43 @@ GEMINI_API_KEY (your key)
 ENVIRONMENT (optional, default: development)
 Important: .env is ignored by git (see .gitignore). Don’t commit secrets.
 
-API routes
+## Recent Additions
+- Migrated the LLM client to the official `google-genai` SDK using `gemini-2.5-flash`.
+- Built robust JSON parsing and fallback error handling routines to parse complex Gemini outputs safely.
+- Connected the LLM predicted outputs directly to SQLite storage using SQLAlchemy.
+- Expanded output tokens to 8192 to allow multi-driver reasoning without generation cut-offs.
+
+## API routes
 The backend mounts these routers:
 
-/api/races
-/api/predictions
-/api/championship
-Health:
+- `/api/races`
+- `/api/predictions`
+- `/api/championship`
 
-GET /health → { "status": "ok" }
-Development notes
-Backend runs with --reload in Docker Compose for faster iteration.
-CORS is configured to allow the Vite dev server at http://localhost:5173.
-Roadmap
-Ingestion from Ergast + OpenF1 and normalization into Postgres
-Derived models (dirty air, tyre degradation)
-Pre-race and live scenario prediction outputs
-Championship Monte Carlo simulation + narrative layer
+### Running Predictions (PowerShell)
+You can directly trigger the backend to generate a pre-race prediction for a specific season and round. Try running these commands in PowerShell:
+
+**Generate a new prediction:**
+```powershell
+(Invoke-RestMethod -Method POST -Uri "http://localhost:8000/api/predictions/pre-race/2026/1" -ContentType "application/json").predicted_order | ConvertTo-Json -Depth 3 > results.txt
+notepad results.txt
+```
+
+**View all past predictions saved in the database:**
+```powershell
+(Invoke-RestMethod -Method GET -Uri "http://localhost:8000/api/predictions").predictions | ConvertTo-Json -Depth 5 > all_predictions.txt
+notepad all_predictions.txt
+```
+
+## Health check
+`GET /health` → `{ "status": "ok" }`
+
+## Development notes
+- Backend runs with `--reload` in Docker Compose for faster iteration.
+- CORS is configured to allow the Vite dev server at `http://localhost:5173`.
+
+## Roadmap
+- [x] Ingestion from Ergast + OpenF1 and normalization into Postgres
+- [x] Derived models (dirty air, tyre degradation)
+- [x] Pre-race and live scenario prediction outputs
+- [ ] Championship Monte Carlo simulation + narrative layer
