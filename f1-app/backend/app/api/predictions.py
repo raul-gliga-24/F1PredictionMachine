@@ -11,7 +11,6 @@ router = APIRouter()
 def get_predictions(db: Session = Depends(get_db)):
     from app.db.models import Prediction
     predictions = db.query(Prediction).order_by(Prediction.created_at.desc()).all()
-    # Safely serialize the SQLAlchemy objects to a native python dictionary
     return {"predictions": [
         {
             "id": p.id,
@@ -57,4 +56,4 @@ def run_pre_race_prediction(
     db: Session = Depends(get_db),
 ):
     from app.prediction.race_predictor import predict_race
-    return predict_race(db, season, round_number)
+    return predict_race(db, season, round_number)

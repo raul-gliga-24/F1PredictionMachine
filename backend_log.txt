@@ -1,0 +1,459 @@
+﻿docker : INFO:     Will 
+watch for changes in 
+these directories: 
+['/app']
+At line:1 char:71
++ ... d-1 --format 
+"{{.Id}}" | 
+ForEach-Object { docker 
+logs $_ 2>&1 } | Out ...
++                         
+                      
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (I  
+  NFO:     Will ...orie   
+ s: ['/app']:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+INFO:     Uvicorn running 
+on http://0.0.0.0:8000 
+(Press CTRL+C to quit)
+INFO:     Started 
+reloader process [1] 
+using WatchFiles
+INFO:     Started server 
+process [8]
+INFO:     Waiting for 
+application startup.
+INFO:     Application 
+startup complete.
+/app/app/prediction/llm_cl
+ient.py:1: FutureWarning: 
+
+All support for the 
+`google.generativeai` 
+package has ended. It 
+will no longer be 
+receiving 
+updates or bug fixes. 
+Please switch to the 
+`google.genai` package as 
+soon as possible.
+See README for more 
+details:
+
+https://github.com/google-
+gemini/deprecated-generati
+ve-ai-python/blob/main/REA
+DME.md
+
+  import 
+google.generativeai as 
+genai
+ERROR:    Exception in 
+ASGI application
+Traceback (most recent 
+call last):
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/grpc_helpers.p
+y", line 55, in 
+error_remapped_callable
+INFO:     172.18.0.1:53062 - "POST /api/predictions/pre-race/2024/5 HTTP/1.1" 500 Internal Server Error
+    return 
+callable_(*args, **kwargs)
+           
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/grpc
+/_interceptor.py", line 
+276, in __call__
+    response, 
+ignored_call = 
+self._with_call(
+                          
+   ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/grpc
+/_interceptor.py", line 
+331, in _with_call
+    return call.result(), 
+call
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/grpc
+/_channel.py", line 438, 
+in result
+    raise self
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/grpc
+/_interceptor.py", line 
+314, in continuation
+    response, call = self.
+_thunk(new_method).with_ca
+ll(
+                     ^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/grpc
+/_channel.py", line 1173, 
+in with_call
+    return _end_unary_resp
+onse_blocking(state, 
+call, True, None)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/grpc
+/_channel.py", line 990, 
+in _end_unary_response_blo
+cking
+    raise 
+_InactiveRpcError(state)  
+# pytype: 
+disable=not-instantiable
+    ^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
+grpc._channel._InactiveRpc
+Error: <_InactiveRpcError 
+of RPC that terminated 
+with:
+	status = 
+StatusCode.NOT_FOUND
+	details = 
+"models/gemini-1.5-flash 
+is not found for API 
+version v1beta, or is not 
+supported for 
+generateContent. Call 
+ListModels to see the 
+list of available models 
+and their supported 
+methods."
+	debug_error_string = 
+"UNKNOWN:Error received 
+from peer 
+ipv4:142.250.203.138:443 
+{grpc_status:5, grpc_messa
+ge:"models/gemini-1.5-flas
+h is not found for API 
+version v1beta, or is not 
+supported for 
+generateContent. Call 
+ListModels to see the 
+list of available models 
+and their supported 
+methods."}"
+>
+
+The above exception was 
+the direct cause of the 
+following exception:
+
+Traceback (most recent 
+call last):
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/uvic
+orn/protocols/http/httptoo
+ls_impl.py", line 416, in 
+run_asgi
+    result = await app(  
+# type: 
+ignore[func-returns-value]
+             ^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/uvic
+orn/middleware/proxy_heade
+rs.py", line 60, in 
+__call__
+    return await 
+self.app(scope, receive, 
+send)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/fast
+api/applications.py", 
+line 1160, in __call__
+    await 
+super().__call__(scope, 
+receive, send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/applications.py", 
+line 107, in __call__
+    await self.middleware_
+stack(scope, receive, 
+send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/middleware/errors.py
+", line 186, in __call__
+    raise exc
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/middleware/errors.py
+", line 164, in __call__
+    await self.app(scope, 
+receive, _send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/middleware/cors.py",
+ line 87, in __call__
+    await self.app(scope, 
+receive, send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/middleware/exception
+s.py", line 63, in 
+__call__
+    await wrap_app_handlin
+g_exceptions(self.app, 
+conn)(scope, receive, 
+send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/_exception_handler.p
+y", line 53, in 
+wrapped_app
+    raise exc
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/_exception_handler.p
+y", line 42, in 
+wrapped_app
+    await app(scope, 
+receive, sender)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/fast
+api/middleware/asyncexitst
+ack.py", line 18, in 
+__call__
+    await self.app(scope, 
+receive, send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/routing.py", line 
+716, in __call__
+    await self.middleware_
+stack(scope, receive, 
+send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/routing.py", line 
+736, in app
+    await 
+route.handle(scope, 
+receive, send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/routing.py", line 
+290, in handle
+    await self.app(scope, 
+receive, send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/fast
+api/routing.py", line 
+130, in app
+    await wrap_app_handlin
+g_exceptions(app, 
+request)(scope, receive, 
+send)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/_exception_handler.p
+y", line 53, in 
+wrapped_app
+    raise exc
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/_exception_handler.p
+y", line 42, in 
+wrapped_app
+    await app(scope, 
+receive, sender)
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/fast
+api/routing.py", line 
+116, in app
+    response = await 
+f(request)
+               
+^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/fast
+api/routing.py", line 
+670, in app
+    raw_response = await 
+run_endpoint_function(
+                   ^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/fast
+api/routing.py", line 
+326, in 
+run_endpoint_function
+    return await run_in_th
+readpool(dependant.call, 
+**values)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/star
+lette/concurrency.py", 
+line 32, in 
+run_in_threadpool
+    return await anyio.to_
+thread.run_sync(func)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/anyi
+o/to_thread.py", line 63, 
+in run_sync
+    return await get_async
+_backend().run_sync_in_wor
+ker_thread(
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/anyi
+o/_backends/_asyncio.py", 
+line 2502, in 
+run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/anyi
+o/_backends/_asyncio.py", 
+line 986, in run
+    result = 
+context.run(func, *args)
+             
+^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/api/predi
+ctions.py", line 47, in 
+run_pre_race_prediction
+    return 
+predict_race(db, season, 
+round_number)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/predictio
+n/race_predictor.py", 
+line 25, in predict_race
+    response = call_llm_wi
+th_context(context, 
+SYSTEM_PROMPT)
+               ^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
+  File "/app/app/predictio
+n/llm_client.py", line 
+32, in 
+call_llm_with_context
+    return 
+call_llm(full_prompt)
+           
+^^^^^^^^^^^^^^^^^^^^^
+  File "/app/app/predictio
+n/llm_client.py", line 
+21, in call_llm
+    response = model.gener
+ate_content(prompt)
+               ^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/generativeai/generative
+_models.py", line 331, in 
+generate_content
+    response = self._clien
+t.generate_content(
+               ^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/ai/generativelanguage_v
+1beta/services/generative_
+service/client.py", line 
+835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/gapic_v1/metho
+d.py", line 128, in 
+__call__
+    return 
+wrapped_func(*args, 
+**kwargs)
+           ^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/retry/retry_un
+ary.py", line 294, in 
+retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/retry/retry_un
+ary.py", line 156, in 
+retry_target
+    next_sleep = 
+_retry_error_helper(
+                 
+^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/retry/retry_ba
+se.py", line 216, in 
+_retry_error_helper
+    raise final_exc from 
+source_exc
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/retry/retry_un
+ary.py", line 147, in 
+retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/timeout.py", 
+line 130, in 
+func_with_timeout
+    return func(*args, 
+**kwargs)
+           
+^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/pyt
+hon3.12/site-packages/goog
+le/api_core/grpc_helpers.p
+y", line 57, in 
+error_remapped_callable
+    raise exceptions.from_
+grpc_error(exc) from exc
+google.api_core.exceptions
+.NotFound: 404 
+models/gemini-1.5-flash 
+is not found for API 
+version v1beta, or is not 
+supported for 
+generateContent. Call 
+ListModels to see the 
+list of available models 
+and their supported 
+methods.
