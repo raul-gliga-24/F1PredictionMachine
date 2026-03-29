@@ -45,15 +45,23 @@ def test_strategy(circuit_id: str, laps: int = 57, temp: float = 35.0):
 def preview_pre_race_context(
     season : int,
     round_number : int,
+    early_season_threshold: int = 3,
     db: Session = Depends(get_db),
 ):
-    return build_prediction_context(db,season,round_number)
+    return build_prediction_context(db, season, round_number, early_season_threshold)
 
 @router.post("/pre-race/{season}/{round_number}")
 def run_pre_race_prediction(
     season: int,
     round_number: int,
+    early_season_threshold: int = 3,
     db: Session = Depends(get_db),
 ):
-    from app.prediction.race_predictor import predict_race
-    return predict_race(db, season, round_number)
+    try:
+        from app.prediction.race_predictor import predict_race
+        return predict_race(db, season, round_number, early_season_threshold)
+    except Exception as e:
+        import traceback
+        with open("C:/Users/raulg/Desktop/Project/F1 predict/f1-app/error.log", "w") as f:
+            f.write(traceback.format_exc())
+        raise e

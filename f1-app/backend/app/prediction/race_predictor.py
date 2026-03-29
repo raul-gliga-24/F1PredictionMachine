@@ -17,12 +17,15 @@ Return ONLY valid JSON in this format:
 }
 """
 
-def predict_race(db: Session, season: int, round_number: int) -> dict:
-    context = build_prediction_context(db, season, round_number)
+def predict_race(db: Session, season: int, round_number: int, early_season_threshold: int = 3) -> dict:
+    context = build_prediction_context(db, season, round_number, early_season_threshold)
     if "Error" in context:
         return context
 
-    response = call_llm_with_context(context, SYSTEM_PROMPT)
+    try:
+        response = call_llm_with_context(context, SYSTEM_PROMPT)
+    except Exception as e:
+        return {"Error": f"LLM API failed: {e}"}
     
     try:
         result = json.loads(response)
@@ -37,13 +40,15 @@ def predict_race(db: Session, season: int, round_number: int) -> dict:
         else:
             return {"Error": "Invalid JSON from LLM", "raw_response": response}
 
+    if not isinstance(result, dict):
+        return {"Error": "LLM returned a non-dictionary JSON object", "raw_response": response}
 
     prediction = Prediction(
         race_id = context["upcoming-race"]["race_id"],
         prediction_type = "pre-race",
         predicted_order = result.get("predicted_order",[]),
         reasoning_trace = result.get("summary", ""),
-        model_used = "gemini-2.5-flash",
+        model_used = "gemini-1.5-flash",
         context_snapshot = context,
     )
     db.add(prediction)
