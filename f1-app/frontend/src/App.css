@@ -129,3 +129,48 @@ select option {
 .predict-btn:active {
   transform: translateY(0);
 }
+
+.result-card {
+  min-height: 300px;
+
+}
+
+.loading-state {
+  color: var(--primary-color);
+  font-weight: bold;
+  animation: pulse 1.5s infinite ease-in-out;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.error-state {
+  background-color: rgba(239, 68, 68, 0.1);
+
+  border-left: 4px solid var(--primary-color);
+  color: #fca5a5;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.json-output {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  color: var(--text-main);
+  font-family: monospace;
+}

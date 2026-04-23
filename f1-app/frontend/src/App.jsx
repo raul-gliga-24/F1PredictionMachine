@@ -1,10 +1,37 @@
+import { useState } from 'react';
 import './App.css';
 import RaceSelector from './components/RaceSelector';
 
 function App() {
-  const handlePredict = (season, round) => {
-    console.log(`Predicting for Season: ${season}, Round: ${round}`);
-    // We will add the fetch() call to the backend here later
+  const [predictionData, setPredictionData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handlePredict = async (season, round) => {
+    setIsLoading(true);
+    setError(null);
+    setPredictionData(null);
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/predictions/pre-race/${season}/${round}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Failed to fetch prediction");
+      }
+      
+      setPredictionData(data);
+    } catch (err) {
+      setError(err.message);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -19,10 +46,25 @@ function App() {
           <h2>Select Race</h2>
           <RaceSelector onPredict={handlePredict} />
         </div>
-        
-        <div className="card">
+
+        <div className="card results-card">
           <h2>Prediction Results</h2>
-          <p style={{color: "var(--text-secondary)"}}>Run a prediction to see the results.</p>
+          
+          {isLoading && <div className='loading-state'>Generating AI Predictions...</div>}
+          
+          {error && <div className='error-state'>{error}</div>}
+          
+          {!isLoading && !error && !predictionData && (
+            <p style={{ color: "var(--text-secondary)" }}>Run a prediction to see the results.</p>
+          )}
+          
+          {!isLoading && !error && predictionData && (
+            <div className='prediction-content'>
+              <pre className='json-output'>
+                {JSON.stringify(predictionData, null, 2)}
+              </pre>
+            </div>
+          )}
         </div>
       </main>
     </div>
