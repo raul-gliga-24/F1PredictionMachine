@@ -48,7 +48,7 @@ def predict_race(db: Session, season: int, round_number: int, early_season_thres
         prediction_type = "pre-race",
         predicted_order = result.get("predicted_order",[]),
         reasoning_trace = result.get("summary", ""),
-        model_used = "gemini-1.5-flash",
+        model_used = "gemini-3-flash-preview",
         context_snapshot = context,
     )
     db.add(prediction)
