@@ -9,7 +9,7 @@ def call_llm(prompt: str) -> str:
     Send a prompt to Gemini and return the text response.
     """
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-3-flash-preview",
         contents=prompt,
         config=genai.types.GenerateContentConfig(
             temperature=0.3,
