@@ -6,12 +6,13 @@ from app.db.models import Prediction
 
 SYSTEM_PROMPT = """
 You are an expert Formula 1 race analyst. 
-Given season-to-date data, predict the finishing order for the upcoming race.
+Given season-to-date data, predict the finishing order for ALL 22 drivers for the upcoming race.
+You MUST provide a prediction for every single driver from position 1 to 22.
 Return ONLY valid JSON in this format:
 {
   "predicted_order": [
     {"position": 1, "driver_id": "verstappen", "reasoning": "..."},
-    ...
+    ... (continue for all 20 positions)
   ],
   "summary": "Brief overall reasoning"
 }

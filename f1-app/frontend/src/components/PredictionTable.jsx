@@ -29,11 +29,10 @@ const PredictionTable = ({ predictions }) => {
                             <tr key={pred.driver_id} style={{ '--team-color': color }}>
                                 <td className='col-pos'>
                                     {
-                                        pred.position === 1 ? <Trophy size={20} color='#FFD7000' /> :
+                                        pred.position === 1 ? <Trophy size={20} color='#FFD700' /> :
                                             pred.position === 2 ? <Trophy size={20} color='#C0C0C0' /> :
                                                 pred.position === 3 ? <Trophy size={20} color='#CD7F32' /> :
-                                                    <span className='pos-text'><P>pred.position</P>
-                                                    </span>
+                                                    <span className='pos-text'>{pred.position}</span>
                                     }
                                 </td>
 

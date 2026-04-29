@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import RaceSelector from './components/RaceSelector';
+import PredictionTable from './components/PredictionTable';
 
 function App() {
   const [predictionData, setPredictionData] = useState(null);
@@ -24,7 +25,7 @@ function App() {
       if (!response.ok) {
         throw new Error(data.detail || "Failed to fetch prediction");
       }
-      
+
       setPredictionData(data);
     } catch (err) {
       setError(err.message);
@@ -49,20 +50,23 @@ function App() {
 
         <div className="card results-card">
           <h2>Prediction Results</h2>
-          
+
           {isLoading && <div className='loading-state'>Generating AI Predictions...</div>}
-          
+
           {error && <div className='error-state'>{error}</div>}
-          
+
           {!isLoading && !error && !predictionData && (
             <p style={{ color: "var(--text-secondary)" }}>Run a prediction to see the results.</p>
           )}
-          
+
           {!isLoading && !error && predictionData && (
             <div className='prediction-content'>
-              <pre className='json-output'>
-                {JSON.stringify(predictionData, null, 2)}
-              </pre>
+              {predictionData.summary && (
+                <div className='prediction-summary'>
+                  <p>{predictionData.summary}</p>
+                </div>
+              )}
+              <PredictionTable predictions={predictionData.predicted_order} />
             </div>
           )}
         </div>
