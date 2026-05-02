@@ -112,3 +112,24 @@ def fetch_qualifying(db: Session, season: int, round_number: int):
         )
     db.commit()
     print(f"Qualifying synced: {len(results)} drivers")
+
+def fetch_standings(season: int, standing_type: str) -> list:
+    if standing_type not in ["drivers", "constructors"]:
+        raise ValueError("standing_type must be either 'drivers' or 'constructors'")
+    
+    endpoint = "driverStandings" if standing_type == "drivers" else "constructorStandings"
+    url = f"{BASE_URL}/{season}/{endpoint}.json"
+    
+    response = httpx.get(url)
+    response.raise_for_status()
+    
+    data = response.json()
+    standings_lists = data.get("MRData", {}).get("StandingsTable", {}).get("StandingsLists", [])
+    
+    if not standings_lists:
+        return []
+        
+    if standing_type == "drivers":
+        return standings_lists[0].get("DriverStandings", [])
+    else:
+        return standings_lists[0].get("ConstructorStandings", [])

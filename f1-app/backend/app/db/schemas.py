@@ -46,6 +46,11 @@ class PredictionRead(BaseModel):
     predicted_order: list
     reasoning_trace: str
     model_used: str
+    season : Optional[int] = None
+    points : Optional[int] = None
+
+class PredictionRespons(PredictionBase):
+    id: int
 
     class Config:
         from_attributes = True

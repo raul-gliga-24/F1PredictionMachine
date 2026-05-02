@@ -125,10 +125,12 @@ class Prediction(Base):
     id               = Column(Integer, primary_key=True, autoincrement=True)
     race_id          = Column(Integer, ForeignKey("races.id"))
     created_at       = Column(DateTime, default=datetime.utcnow)
-    prediction_type  = Column(String)
+    prediction_type  = Column(String,index=True)
     predicted_order  = Column(JSON)
     reasoning_trace  = Column(Text)
     model_used       = Column(String)
     context_snapshot = Column(JSON)
+    points = Column(Integer,nullable=True)
+    
 
     race = relationship("Race", back_populates="predictions")
