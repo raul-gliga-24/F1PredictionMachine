@@ -317,3 +317,43 @@ select option {
   color: var(--text-main);
   font-family: monospace;
 }
+
+.championship-summary {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+
+}
+
+.championship-summary h2 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.standings-title {
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.col-pts {
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  font-size: 1.1rem;
+
+}
+
+.standings-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width:1024px) {
+  .standings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
