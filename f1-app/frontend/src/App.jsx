@@ -2,28 +2,31 @@ import { useState } from 'react';
 import './App.css';
 import RaceSelector from './components/RaceSelector';
 import PredictionTable from './components/PredictionTable';
+import ChampionshipDashboard from './components/ChampionshipDashboard';
+import { predictRace, predictChampionship } from './api/api';
 
 function App() {
   const [predictionData, setPredictionData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handlePredict = async (season, round) => {
+  const [currentMode, setCurrentMode] = useState('race');
+
+  const handlePredict = async (predictionConfig) => {
+    const { mode, season, round } = predictionConfig;
+
     setIsLoading(true);
     setError(null);
     setPredictionData(null);
+    setCurrentMode(mode);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/predictions/pre-race/${season}/${round}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await response.json();
+      let data;
 
-      if (!response.ok) {
-        throw new Error(data.detail || "Failed to fetch prediction");
+      if (mode === 'race') {
+        data = await predictRace(season, round);
+      } else {
+        data = await predictChampionship(season);
       }
 
       setPredictionData(data);
@@ -44,7 +47,7 @@ function App() {
 
       <main className="dashboard">
         <div className="card">
-          <h2>Select Race</h2>
+          <h2>Select Prediction</h2>
           <RaceSelector onPredict={handlePredict} />
         </div>
 
@@ -66,7 +69,12 @@ function App() {
                   <p>{predictionData.summary}</p>
                 </div>
               )}
-              <PredictionTable predictions={predictionData.predicted_order} />
+
+              {currentMode === 'race' ? (
+                <PredictionTable predictions={predictionData.predicted_order || predictionData.predictions} />
+              ) : (
+                <ChampionshipDashboard data={predictionData} />
+              )}
             </div>
           )}
         </div>
