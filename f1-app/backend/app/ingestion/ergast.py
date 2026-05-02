@@ -43,6 +43,7 @@ def fetch_drivers(db: Session, season: int = 2024):
             db.add(driver)
     db.commit()
     print(f"Drivers synced: {len(data)}")
+    return data
 
 
 def fetch_races(db: Session, season: int = 2024):

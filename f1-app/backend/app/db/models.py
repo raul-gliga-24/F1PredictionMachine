@@ -130,7 +130,10 @@ class Prediction(Base):
     reasoning_trace  = Column(Text)
     model_used       = Column(String)
     context_snapshot = Column(JSON)
-    points = Column(Integer,nullable=True)
-    
+    points           = Column(Integer, nullable=True)
+    season           = Column(Integer, nullable=True)
+    driver_id        = Column(String, ForeignKey("drivers.id"), nullable=True)
+    position         = Column(Integer, nullable=True)
+    reasoning        = Column(Text, nullable=True)
 
     race = relationship("Race", back_populates="predictions")

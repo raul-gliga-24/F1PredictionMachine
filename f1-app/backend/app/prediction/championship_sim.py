@@ -5,12 +5,12 @@ from app.prediction.llm_client import call_llm_with_context
 from app.ingestion.ergast import fetch_drivers,fetch_standings
 
 
-def build_championship_context(season : int):
+def build_championship_context(db, season: int):
     prev_season = season - 1
     prev_driver_standings = fetch_standings(prev_season, "drivers")
     prev_constructor_standings = fetch_standings(prev_season, "constructors")
 
-    current_lineup = fetch_drivers(season)
+    current_lineup = fetch_drivers(db, season)
 
     rule_changes = "2026 introduces massive regulation changes: 50/50 ICE/Electrical power split, active aerodynamics, smaller and lighter cars, and the removal of MGU-H. Cadillac enters as the 11th team. Audi takes over Sauber."
 
@@ -40,11 +40,19 @@ Do not use markdown formatting outside the JSON block.
 """
 
 def predict_championship(db: session, season:int):
-    context_str = build_championship_context(season)
+    context_str = build_championship_context(db, season)
     raw_response = call_llm_with_context(SYSTEM_PROMPT,context_str)
 
     try:
-        response_data = json.loads(raw_response)
+        cleaned_response = raw_response.strip()
+        if cleaned_response.startswith("```json"):
+            cleaned_response = cleaned_response[7:]
+        if cleaned_response.startswith("```"):
+            cleaned_response = cleaned_response[3:]
+        if cleaned_response.endswith("```"):
+            cleaned_response = cleaned_response[:-3]
+        
+        response_data = json.loads(cleaned_response.strip())
     except json.JSONDecodeError:
         raise ValueError("LLM failed to return valid JSON")
 
