@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Trophy, Flag } from 'lucide-react';
 
 function RaceSelector({ onPredict }) {
@@ -8,6 +8,32 @@ function RaceSelector({ onPredict }) {
     const [season, setSeason] = useState('2026');
     const [round, setRound] = useState('4');
 
+    const [schedule, setSchedule] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const availableSeasons = [2027, 2026, 2025, 2024];
+
+    useEffect(() => {
+        const fetchSchedule = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetch(`http://localhost:8000/api/races/schedule/${season}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setSchedule(data.schedule || []);
+                    if (data.schedule && data.schedule.length > 0) {
+                        setRound(data.schedule[0].round.toString());
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch schedule", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchSchedule();
+    }, [season]);
 
     const handlePredict = () => {
 
@@ -42,18 +68,23 @@ function RaceSelector({ onPredict }) {
             <div className='form-group'>
                 <label>Seasonn</label>
                 <select value={season} onChange={(e) => setSeason(e.target.value)}>
-                    <option value="2026">2026</option>
-                    <option value="2025">2025</option>
+                    {availableSeasons.map(s => (
+                        <option key={s} value={s}>{s}</option>
+                    ))}
                 </select>
             </div>
 
             {mode === 'race' && (
                 <div className='form-group slide-in'>
                     <label>Round</label>
-                    <select value={round} onChange={(e) => setRound(e.target.value)}>
-                        <option value="1">Round 1 (Australia)</option>
-                        <option value="2">Round 2 (China)</option>
-                        <option value="3">Round 3 (Japan)</option>
+                    <select value={round} onChange={(e) => setRound(e.target.value)} disabled={isLoading}>
+                        {isLoading ? (
+                            <option>Loading schedule...</option>
+                        ) : (
+                            schedule.map(r => (
+                                <option key={r.round} value={r.round}>Round {r.round} - {r.raceName}</option>
+                            ))
+                        )}
                     </select>
                 </div>
             )}
