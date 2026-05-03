@@ -1,26 +1,26 @@
-import React from "react";
-import StandingsTable from "./StandingsTable";
+import React from 'react';
+import StandingsTable from './StandingsTable';
 
 const ChampionshipDashboard = ({ data }) => {
     if (!data) return null;
 
     return (
-        <div className="results-card championship-dashboard">
+        <div className="championship-dashboard">
             {data.summary && (
-                <div className="championship-summary">
-                    <h2>Season Overview</h2>
-                    <p className="summary-text">{data.summary}</p>
-                </div>
+                <blockquote className="pull-quote">
+                    {data.summary}
+                </blockquote>
             )}
+
             <div className="standings-grid">
                 <StandingsTable
-                    title="Driver's Championship"
+                    title="Driver Standings"
                     type="driver"
                     standings={data.driver_standings}
                 />
 
                 <StandingsTable
-                    title="Constructor's Championship"
+                    title="Constructor Standings"
                     type="constructor"
                     standings={data.constructor_standings}
                 />
@@ -28,4 +28,5 @@ const ChampionshipDashboard = ({ data }) => {
         </div>
     );
 };
+
 export default ChampionshipDashboard;

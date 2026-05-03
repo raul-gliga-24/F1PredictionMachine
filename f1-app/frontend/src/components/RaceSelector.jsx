@@ -46,7 +46,7 @@ function RaceSelector({ onPredict }) {
 
 
     return (
-        <div className='race-selectoor'>
+        <div className='race-selector'>
             <div className='mode-toggle-container'>
                 <div className='mode-toggle'>
                     <button
@@ -66,7 +66,7 @@ function RaceSelector({ onPredict }) {
                 </div>
             </div>
             <div className='form-group'>
-                <label>Seasonn</label>
+                <label>Season</label>
                 <select value={season} onChange={(e) => setSeason(e.target.value)}>
                     {availableSeasons.map(s => (
                         <option key={s} value={s}>{s}</option>
