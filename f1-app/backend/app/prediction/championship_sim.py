@@ -2,7 +2,7 @@ import json
 from sqlalchemy.orm import session
 from app.db.models import Prediction
 from app.prediction.llm_client import call_llm_with_context
-from app.ingestion.ergast import fetch_drivers,fetch_standings
+from app.ingestion.ergast import fetch_drivers,fetch_standings, fetch_season_results
 
 
 def build_championship_context(db, season: int):
@@ -12,6 +12,8 @@ def build_championship_context(db, season: int):
 
     current_lineup = fetch_drivers(db, season)
 
+    real_season_performance_data = fetch_season_results(season)
+
     rule_changes = "2026 introduces massive regulation changes: 50/50 ICE/Electrical power split, active aerodynamics, smaller and lighter cars, and the removal of MGU-H. Cadillac enters as the 11th team. Audi takes over Sauber."
 
     context = {
@@ -19,16 +21,19 @@ def build_championship_context(db, season: int):
         "previous_driver_standings": prev_driver_standings,
         "previous_constructor_standings": prev_constructor_standings,
         "current_lineup": current_lineup,
-        "rule_changes": rule_changes
+        "rule_changes": rule_changes,
+        "real_season_performance_data" : real_season_performance_data
     }
     return json.dumps(context)
 
 SYSTEM_PROMPT = """
-You are an expert Formula 1 analyst. Based on the provided context (previous season standings, current driver lineups, and major rule changes), predict the final Driver and Constructor standings for the target season. 
+You are an expert Formula 1 analyst. Based on the provided context, predict the final Driver and Constructor standings for the target season. 
+
+CRITICAL INSTRUCTION: You have been provided with 'real_season_performance_data' which contains the actual top 10 race results for the season so far. You MUST use this data to accurately judge true car pace and driver form. Ensure your final standings predictions closely align with the competitive order shown in these actual race results.
 
 You MUST return a valid JSON object with the following structure:
 {
-  "summary": "A high-level overview of the season narrative.",
+  "summary": "A high-level overview of the season narrative, explaining how the cars actually performed.",
   "driver_standings": [
     {"driver_id": "string", "position": int, "points": int, "reasoning": "string"}
   ],
@@ -38,6 +43,7 @@ You MUST return a valid JSON object with the following structure:
 }
 Do not use markdown formatting outside the JSON block.
 """
+
 
 def predict_championship(db: session, season:int):
     context_str = build_championship_context(db, season)

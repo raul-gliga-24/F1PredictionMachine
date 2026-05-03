@@ -134,3 +134,48 @@ def fetch_standings(season: int, standing_type: str) -> list:
         return standings_lists[0].get("DriverStandings", [])
     else:
         return standings_lists[0].get("ConstructorStandings", [])
+
+
+def fetch_season_results(season: int):
+    """
+    Fetches the top 10 finishers for all completed races in a given season.
+    Acts as 'cheat' data for the LLM to understand true car performance.
+    """
+    url = f"{BASE_URL}/{season}/results.json?limit=1000"
+
+    try:
+        response = httpx.get(url,timeout = 15.0)
+        response.raise_for_status()
+
+        data = response.json()
+
+        races = data.get("MRData",{}).get("RaceTable",{}).get("Races",[])
+
+        if not races:
+            return []
+
+        season_performance = []
+        for race in races:
+            results = race.get("Results",[])
+            if not results:
+                continue
+
+            top_10 = []
+            for r in results[:10]:
+                top_10.append({
+                    "position":int(r["position"]),
+                    "driver" : r["Driver"]["driverId"],
+                    "team" : r["Constructor"]["constructorId"],
+                    "points" : float(r["points"])
+                })
+
+            season_performance.append({
+                "round" : int(race["round"]),
+                "race_name" : race["raceName"],
+                "top_10" : top_10
+            })
+        print(f"Season results fetched for {season}: {len(season_performance)} races")
+        return season_performance
+    except Exception as e:
+        print(f"Error fetching season results for {season}: {e}")
+        return []

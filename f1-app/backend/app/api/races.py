@@ -4,6 +4,7 @@ from app.db.session import get_db
 from app.ingestion import ergast
 from app.ingestion import openf1, fastf1_loader
 import traceback
+import httpx
 
 router = APIRouter()
 
@@ -67,3 +68,22 @@ def sync_round(season: int, round_number: int, db: Session = Depends(get_db)):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"{type(e).__name__}: {str(e)}\n{traceback.format_exc()}")
+
+@router.get("/schedule/{season}")
+def get_season_schedule(season: int):
+    url = f"https://api.jolpi.ca/ergast/f1/{season}.json"
+    try:
+        response = httpx.get(url, timeout=10.0)
+        response.raise_for_status()
+        data = response.json()
+        races = data.get("MRData", {}).get("RaceTable", {}).get("Races", [])
+        schedule = [
+            {
+                "round": int(r["round"]),
+                "raceName": r["raceName"]
+            }
+            for r in races
+        ]
+        return {"season": season, "schedule": schedule}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch schedule from Ergast: {e}")
