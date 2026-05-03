@@ -3,7 +3,8 @@ import './App.css';
 import RaceSelector from './components/RaceSelector';
 import PredictionTable from './components/PredictionTable';
 import ChampionshipDashboard from './components/ChampionshipDashboard';
-import { predictRace, predictChampionship } from './api/api';
+import ScenarioDashboard from './components/ScenarioDashboard';
+import { predictRace, predictChampionship, predictScenario } from './api/api';
 import { Gauge } from 'lucide-react';
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
   const [currentMode, setCurrentMode] = useState('race');
 
   const handlePredict = async (predictionConfig) => {
-    const { mode, season, round } = predictionConfig;
+    const { mode, season, round, detailed, driverId } = predictionConfig;
 
     setIsLoading(true);
     setError(null);
@@ -24,8 +25,10 @@ function App() {
       let data;
       if (mode === 'race') {
         data = await predictRace(season, round);
+      } else if (mode === 'championship') {
+        data = await predictChampionship(season, detailed);
       } else {
-        data = await predictChampionship(season);
+        data = await predictScenario(season, driverId);
       }
       setPredictionData(data);
     } catch (err) {
@@ -45,6 +48,16 @@ function App() {
       document.body.classList.remove('has-results');
     }
   }, [hasResults]);
+
+  const renderResults = () => {
+    if (currentMode === 'race') {
+      return <PredictionTable predictions={predictionData.predicted_order || predictionData.predictions} summary={predictionData.summary} />;
+    } else if (currentMode === 'championship') {
+      return <ChampionshipDashboard data={predictionData} />;
+    } else {
+      return <ScenarioDashboard data={predictionData} />;
+    }
+  };
 
   return (
     <>
@@ -70,16 +83,10 @@ function App() {
           {hasResults && (
             <div className="results-area">
               {isLoading && <div className='loading-state'>Generating AI Predictions...</div>}
-
               {error && <div className='error-state'>{error}</div>}
-
               {!isLoading && !error && predictionData && (
                 <div className='prediction-content'>
-                  {currentMode === 'race' ? (
-                    <PredictionTable predictions={predictionData.predicted_order || predictionData.predictions} summary={predictionData.summary} />
-                  ) : (
-                    <ChampionshipDashboard data={predictionData} />
-                  )}
+                  {renderResults()}
                 </div>
               )}
             </div>
@@ -90,4 +97,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;

@@ -1,5 +1,6 @@
 import React from 'react';
 import StandingsTable from './StandingsTable';
+import RaceBreakdown from './RaceBreakdown';
 
 const ChampionshipDashboard = ({ data }) => {
     if (!data) return null;
@@ -10,6 +11,10 @@ const ChampionshipDashboard = ({ data }) => {
                 <blockquote className="pull-quote">
                     {data.summary}
                 </blockquote>
+            )}
+
+            {data.race_results && data.race_results.length > 0 && (
+                <RaceBreakdown races={data.race_results} />
             )}
 
             <div className="standings-grid">
@@ -29,4 +34,4 @@ const ChampionshipDashboard = ({ data }) => {
     );
 };
 
-export default ChampionshipDashboard;
+export default ChampionshipDashboard;

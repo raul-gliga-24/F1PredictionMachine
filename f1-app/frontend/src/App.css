@@ -543,3 +543,366 @@ select option {
     width: 0;
   }
 }
+
+/* --- Detail Toggle (Simple/Detailed) --- */
+.detail-toggle {
+  display: flex;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* --- Race Breakdown Accordion --- */
+.race-breakdown {
+  margin-bottom: 2rem;
+}
+
+.breakdown-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.breakdown-row {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  transition: border-color 0.2s;
+}
+
+.breakdown-row.open {
+  border-color: rgba(255,255,255,0.12);
+}
+
+.breakdown-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.breakdown-header:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.breakdown-round-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: center;
+}
+
+.breakdown-race-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.breakdown-winner-pill {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.breakdown-chevron {
+  color: var(--text-muted);
+}
+
+.breakdown-details {
+  padding: 10px 14px 14px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.breakdown-top5 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.breakdown-driver-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+}
+
+.breakdown-position {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8rem;
+  min-width: 24px;
+}
+
+.breakdown-driver-bar {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.breakdown-driver-name {
+  flex: 1;
+  color: var(--text-main);
+}
+
+.breakdown-driver-team {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breakdown-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.breakdown-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.breakdown-meta-item.dnf {
+  color: var(--primary-color);
+}
+
+/* --- Scenario Dashboard --- */
+.scenario-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.scenario-possible-banner,
+.scenario-impossible-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid;
+}
+
+.scenario-possible-banner {
+  background: rgba(34, 197, 94, 0.06);
+  border-color: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+.scenario-impossible-banner {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+}
+
+.scenario-possible-banner h2,
+.scenario-impossible-banner h2 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.scenario-possible-banner p,
+.scenario-impossible-banner p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.scenario-clinch-info {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.scenario-pts-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.scenario-summary {
+  margin-top: 0;
+}
+
+.scenario-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.scenario-req-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scenario-req-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.02);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.req-icon {
+  color: var(--primary-color);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Scenario Timeline */
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 16px;
+}
+
+.timeline-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.timeline-line {
+  width: 2px;
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  min-height: 20px;
+  margin: 4px 0;
+}
+
+.timeline-content {
+  padding-bottom: 20px;
+  flex: 1;
+}
+
+.timeline-item.clinch-round .timeline-content {
+  background: rgba(255, 215, 0, 0.04);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 8px;
+  padding: 10px 14px 10px;
+  margin-bottom: 20px;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.timeline-round {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+.timeline-race-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.clinch-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  background: rgba(255, 215, 0, 0.15);
+  color: #FFD700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.timeline-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-target-result {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.timeline-rivals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.timeline-rival-chip {
+  font-size: 0.78rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.timeline-pts-after {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
