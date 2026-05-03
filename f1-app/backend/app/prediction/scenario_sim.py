@@ -147,6 +147,7 @@ def predict_scenario(db: Session, season: int, target_driver_id: str) -> dict:
         raw = call_llm_with_context(context, SCENARIO_SYSTEM_PROMPT)
 
     try:
+        print(f"RAW LLM OUTPUT:\n{raw}")
         cleaned = raw.strip()
         if cleaned.startswith("```json"):
             cleaned = cleaned[7:]
@@ -155,5 +156,6 @@ def predict_scenario(db: Session, season: int, target_driver_id: str) -> dict:
         if cleaned.endswith("```"):
             cleaned = cleaned[:-3]
         return json.loads(cleaned.strip())
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print(f"JSON Decode Error: {e}")
         raise ValueError("LLM failed to return valid JSON for scenario simulation.")

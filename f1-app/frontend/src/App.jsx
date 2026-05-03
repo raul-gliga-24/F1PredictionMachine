@@ -49,6 +49,23 @@ function App() {
     }
   }, [hasResults]);
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Calculate coordinates relative to the window
+      const x = `${e.clientX}px`;
+      const y = `${e.clientY}px`;
+      
+      // Update custom properties on the root element
+      document.documentElement.style.setProperty('--mouse-x', x);
+      document.documentElement.style.setProperty('--mouse-y', y);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   const renderResults = () => {
     if (currentMode === 'race') {
       return <PredictionTable predictions={predictionData.predicted_order || predictionData.predictions} summary={predictionData.summary} />;
