@@ -1,2 +1,0 @@
-(Invoke-RestMethod -Method POST -Uri "http://localhost:8000/api/predictions/pre-race/2024/5" -ContentType "application/json").predicted_order | ConvertTo-Json -Depth 3 > results.txt
->> notepad results.txt
