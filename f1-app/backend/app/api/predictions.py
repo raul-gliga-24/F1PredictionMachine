@@ -4,6 +4,8 @@ from app.db.session import get_db
 from app.prediction.race_context import build_prediction_context
 from app.models.dirty_air import calculate_grid_dirty_air
 from app.models.tyre_deg import calculate_full_strategy
+from app.core.redis import cache_response
+
 
 router = APIRouter()
 
@@ -42,7 +44,9 @@ def test_strategy(circuit_id: str, laps: int = 57, temp: float = 35.0):
     return calculate_full_strategy(circuit_id, laps, temp)
 
 @router.get("/pre-race/context/{season}/{round_number}")
+@cache_response(expire_seconds=86400) # Cache for 24 hours
 def preview_pre_race_context(
+
     season : int,
     round_number : int,
     early_season_threshold: int = 3,
@@ -51,7 +55,9 @@ def preview_pre_race_context(
     return build_prediction_context(db, season, round_number, early_season_threshold)
 
 @router.post("/pre-race/{season}/{round_number}")
+@cache_response(expire_seconds=86400) # Cache for 24 hours
 def run_pre_race_prediction(
+
     season: int,
     round_number: int,
     early_season_threshold: int = 3,

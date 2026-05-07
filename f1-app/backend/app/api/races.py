@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.ingestion import ergast
 from app.ingestion import openf1, fastf1_loader
+from app.core.redis import cache_response
 import traceback
+
 import httpx
 
 router = APIRouter()
@@ -70,7 +72,9 @@ def sync_round(season: int, round_number: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"{type(e).__name__}: {str(e)}\n{traceback.format_exc()}")
 
 @router.get("/schedule/{season}")
+@cache_response(expire_seconds=604800) # Cache for 1 week
 def get_season_schedule(season: int):
+
     url = f"https://api.jolpi.ca/ergast/f1/{season}.json"
     try:
         response = httpx.get(url, timeout=10.0)
