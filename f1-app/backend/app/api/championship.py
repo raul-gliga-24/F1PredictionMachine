@@ -4,11 +4,15 @@ from app.db.session import get_db
 from app.prediction.championship_sim import predict_championship
 from app.prediction.scenario_sim import predict_scenario
 from app.db.models import Prediction
+from app.core.redis import cache_response
+
 
 router = APIRouter()
 
 @router.post("/championship/{season}")
+@cache_response(expire_seconds=86400) # Cache for 24 hours
 def predict_season_championship(season: int, detailed: bool = False, db: Session = Depends(get_db)):
+
     try:
         results = predict_championship(db, season, detailed=detailed)
         return {"status": "success", "data": results}
@@ -16,7 +20,9 @@ def predict_season_championship(season: int, detailed: bool = False, db: Session
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/scenario/{season}/{driver_id}")
+@cache_response(expire_seconds=86400) # Cache for 24 hours
 def simulate_to_win(season: int, driver_id: str, db: Session = Depends(get_db)):
+
     try:
         result = predict_scenario(db, season, driver_id)
         return {"status": "success", "data": result}
